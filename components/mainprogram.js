@@ -1,102 +1,109 @@
-import React, { useState } from "react"
-import Layout from "./layout"
-import * as XLSX from 'xlsx'
+import React, { useEffect, useState } from "react";
+import Layout from "./layout";
+import * as XLSX from "xlsx";
 
 // Untuk membuat kolom pada datatable
 const columns = [
   {
-    name: "No",
-    selector: (row) => row.id,
+    name: "Bokford",
+    selector: (row) => row.bokford,
     sortable: true,
   },
   {
-    name: "Title",
-    selector: (row) => row.title,
+    name: "Valuta",
+    selector: (row) => row.valuta,
     sortable: true,
   },
   {
-    name: "Brand",
-    selector: (row) => row.brand,
+    name: "Nummer",
+    selector: (row) => row.nummer,
     sortable: true,
   },
   {
-    name: "Category",
-    selector: (row) => row.category,
+    name: "Text",
+    selector: (row) => row.text,
     sortable: true,
   },
   {
-    name: "Price",
-    selector: (row) => `Rp. ${(row.price * 15000).toLocaleString("id-ID")}`,
-    sortable: true,
+    name: "Belopp",
+    selector: (row) => row.belopp,
   },
   {
     name: "Stocks",
-    selector: (row) => row.stock,
+    selector: (row) => `Rp. ${(row.price * 15000).toLocaleString("id-ID")}`,
+    sortable: true,
   },
 ];
 
-const MainProgram = ({data}) => {
-    const [tableData, setTableData]       = useState([])
-    const [buttonExport, setButtonExport] = useState(true);
-    const [showModal, setShowModal]       = useState(false)
+const MainProgram = ({ data, moreData }) => {
+  const [tableData, setTableData] = useState([]);
+  const [buttonExport, setButtonExport] = useState(true);
+  const [showModal, setShowModal] = useState(false);
 
-    // Mengubah data dari excel menjadi array
-    const convertToArray = (data) => {
-      setTableData(data)
-      setShowModal(!showModal)
-    };
-    // Cek apabila datanya tidak ada
-    if(!tableData) return null;
+  useEffect(() => {
+    setTableData(data);
+  }, [data]);
 
-    // Fungsi untuk menampilkan data dari api
-    const apiData = (data) => {
-        const product = data.products;
-        setTableData(product);
-        setButtonExport(true);
-        setShowModal(!showModal)
-    }
+  // console.log("tableData", tableData);
 
-    // Fungsi untuk mengimport data excel
-    const importExcel = (e) => {
-        const file = e.target.files[0];
-        const reader = new FileReader()
-        reader.onload = (event) => {
-            const bstr          = event.target.result
-            const workBook      = XLSX.read(bstr, { type: "binary" })
-            const workSheetName = workBook.SheetNames[0]
-            const workSheet     = workBook.Sheets[workSheetName]
-            const fileData      = XLSX.utils.sheet_to_json(workSheet, { header: 2 })
-            const headers       = fileData
-            const heads         = headers.map(head => ({ title: head, field: head }))
-            convertToArray(headers, fileData)
-        }
-        reader.readAsBinaryString(file)
-        setButtonExport(false)
-    }
+  // Mengubah data dari excel menjadi array
+  const convertToArray = (data) => {
+    // remove first 7 row in data array
+    data.splice(0, 5);
+    setTableData(data);
+    setShowModal(!showModal);
+  };
+  // Cek apabila datanya tidak ada
+  if (!tableData) return null;
 
-    // Fungsi untuk mengexport data kedalam excel
-    const exportExcel = (data) => {
-        const worksheet     = XLSX.utils.json_to_sheet(data);
-        const workbook      = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-        XLSX.writeFile(workbook, "DataSheet.xlsx");
-    }
+  // Fungsi untuk menampilkan data dari api
+  const apiData = (data) => {
+    const product = data.products;
+    setTableData(product);
+    setButtonExport(true);
+    setShowModal(!showModal);
+  };
 
-    // Untuk menampilkan data kedalam datatable
-    return (
-        <Layout 
-            tableData={tableData} 
-            showModal={showModal} 
-            setShowModal={setShowModal} 
-            columns={columns} 
-            apiData={apiData}
-            importExcel={importExcel}
-            exportExcel={exportExcel}
-            data={data}
-            buttonExport={buttonExport}
-            setButtonExport={setButtonExport}
-        />
-    );
-}
+  // Fungsi untuk mengimport data excel
+  const importExcel = async (e) => {
+    const file = e.target.files[0];
+    const data = await file.arrayBuffer();
+    const workBook = XLSX.read(data);
+    const workSheet = workBook.Sheets[workBook.SheetNames[0]];
+    const fileData = XLSX.utils.sheet_to_json(workSheet, {
+      header: ["bokford", "valuta", "nummer", "text", "belopp"],
+    });
+    const headers = fileData;
+    const heads = headers.map((head) => ({ title: head, field: head }));
+    convertToArray(headers, fileData);
 
-export  default  MainProgram
+    setButtonExport(false);
+  };
+
+  // Fungsi untuk mengexport data kedalam excel
+  const exportExcel = (data) => {
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+    XLSX.writeFile(workbook, "DataSheet.xlsx");
+  };
+
+  // Untuk menampilkan data kedalam datatable
+  return (
+    <Layout
+      moreData={moreData}
+      tableData={tableData}
+      showModal={showModal}
+      setShowModal={setShowModal}
+      columns={columns}
+      apiData={apiData}
+      importExcel={importExcel}
+      exportExcel={exportExcel}
+      data={data}
+      buttonExport={buttonExport}
+      setButtonExport={setButtonExport}
+    />
+  );
+};
+
+export default MainProgram;
