@@ -28,7 +28,7 @@ export async function getStaticProps() {
   const sheetName = workbook.SheetNames[0];
   const worksheet = workbook.Sheets[sheetName];
   let fileData = XLSX.utils.sheet_to_json(worksheet, {
-    header: ["bokford", "valuta", "nummer", "text", "belopp"],
+    header: ["bokford", "valuta", "nummer", "text", "belopp", "saldo"],
   });
 
   // remove first 5 rows in data array
@@ -66,27 +66,12 @@ export async function getStaticProps() {
     Object.entries(objectExpense).sort()
   );
 
-  // combine all objectExpense that has key  "WILLYS GOTEB/23-01-11", "WILLYS GOTEB/23-01-16", "WILLYS GOTEB/23-03-25" into one key "WILLYS"
-  const combinedExpensesData = {};
-  for (const [key, value] of Object.entries(sortedExpensesData)) {
-    if (key.includes("WILLYS")) {
-      if (!combinedExpensesData["WILLYS"]) {
-        combinedExpensesData["WILLYS"] = [];
-      }
-      combinedExpensesData["WILLYS"] = [
-        ...combinedExpensesData["WILLYS"],
-        ...value,
-      ];
-    } else {
-      combinedExpensesData[key] = value;
-    }
-  }
-
   // combine all objectExpense that has key with "/YY-MM-DD" into one key based on the first 5 characters
   const combinedExpensesData2 = {};
-  for (const [key, value] of Object.entries(combinedExpensesData)) {
+  for (const [key, value] of Object.entries(sortedExpensesData)) {
     if (key.includes("/")) {
-      const newKey = key.slice(0, 6);
+      const index = key.indexOf("/");
+      const newKey = key.slice(0, index).trim();
       if (!combinedExpensesData2[newKey]) {
         combinedExpensesData2[newKey] = [];
       }
@@ -100,38 +85,239 @@ export async function getStaticProps() {
   }
 
   const objectKeys = {
-    Mat: ["WILLYS", "LIDL"],
+    Okänd: ["1232900371", "1233199221", "1236218176", "1236417380"],
+    Räkning: ["VISMA FINANCIAL SOLUTION"],
+    Hälsa: ["APOTEKET AB", "REGIONSERVICE PATIENTFAK"],
+    Nöje: [
+      "AMAZONRETAIL",
+      "K*SPELBUTIKE",
+      "RIOT  AE3N32",
+      "RIOT  AE35HZ",
+      "HAGABIONS CA",
+      "KJELL & CO 1",
+      "KJELL & CO 3",
+    ],
+    Present: ["DESIGNTORGET"],
+    Övrigt: [
+      "SAN FR",
+      "DUBLIN",
+      "DELABO",
+      "VÄSTRA GÖTAL",
+      "BJORKAFRIHET",
+      "BILLOGRAM",
+      "WH GOTEBORG",
+      "SAN FRANSICO",
+      "SAN FRANCISC",
+      "WH GOTEBORG ",
+      "GÖTEBORGS UN",
+      "K*ETSY.COM",
+      "EC STATIONS",
+      "AKADEMIBOKHA",
+    ],
+    SEB_Enkla: ["ENKLA VARDAG"],
+    Hemförsäkring: ["IF SKADEFÖRS"],
+    Hyra: ["HSB MÖLNDAL EK. FÖR."],
+    LÅN_MoneyGo: ["MONEYGO AB"],
+    LÅN_SEB: ["LÅNEOMS"],
+    Resor: ["VÄSTTRAFIK A", "VASTTRAFIK T"],
+    Träning: ["NORDICWELL", "SPORTLIFE M", "FTC MOLNDAL"],
+    El: ["MÖLNDAL ENERGI AB"],
+    Telefon: ["TELENOR", "VIMLA"],
+    Mat: [
+      "WILLYS GOTEB",
+      "WILLYS HEMMA",
+      "WILLY:S AB",
+      "LIDL 346",
+      "HEMKOP",
+      "HEMKOP GOTEG",
+      "HEMKOP TROLL",
+      "NYTTIG",
+    ],
+    Utemat: [
+      "FLODAJERNVEG",
+      "LILLA TOKYO",
+      "KROKSLATTS L",
+      "KROKSLATTS S",
+      "SALTES RESTA",
+      "7-ELEVEN GBG",
+      "7ELEVEN GBG",
+      "4415193 7-EL",
+      "4128113 PRES",
+      "4028150 PRES",
+      "LE SUSHIBAR ",
+      "ESPRESSO H 2",
+      "K*FOODORA AB",
+      "NYTTIG SNABB",
+      "PIZZA 4 YOU",
+      "ONEFOOD",
+      "OAKVILLE",
+      "NW GOTEBORG",
+      "LE SUSHIBAR",
+      "DELABOLE",
+    ],
+    Abonnemang: ["FRISKTANDV", "GOTEBORGS-PO", "UNIONEN", "UNION.AKASSA"],
   };
 
-  // combine from combinedExpensesData2 into objectKeys
+  // combine from combinedExpensesData2 into objectKeys as combinedCategories
   const combinedCategories = {};
   for (const [key, value] of Object.entries(combinedExpensesData2)) {
-    if (objectKeys.Mat.includes(key)) {
-      if (!combinedCategories["Mat"]) {
-        combinedCategories["Mat"] = [];
+    const matchedKey = Object.keys(objectKeys).find((objKey) =>
+      objectKeys[objKey].includes(key)
+    );
+    if (matchedKey) {
+      if (!combinedCategories[matchedKey]) {
+        combinedCategories[matchedKey] = [];
       }
-      combinedCategories["Mat"] = [...combinedCategories["Mat"], ...value];
+      combinedCategories[matchedKey] = [
+        ...combinedCategories[matchedKey],
+        ...value,
+      ];
     } else {
       combinedCategories[key] = value;
     }
   }
 
-  console.log("combinedCategories", combinedCategories);
+  const customOrder = [
+    "Telefon",
+    "El",
+    "Hemförsäkring",
+    "Hyra",
+    "LÅN_MoneyGo",
+    "LÅN_SEB",
+    "Utemat",
+    "Mat",
+    "Nöje",
+    "Resor",
+    "Träning",
+    "Övrigt",
+    "SEB_Enkla",
+    "Abonnemang",
+    "d",
+    "b",
+    "e",
+  ];
+
+  const sortedData = Object.fromEntries(
+    Object.entries(combinedCategories).sort(
+      ([keyA], [keyB]) => customOrder.indexOf(keyA) - customOrder.indexOf(keyB)
+    )
+  );
+
+  const objectPermExpense = {
+    Hyra: ["HSB MÖLNDAL EK. FÖR."],
+    SEB_Enkla: ["ENKLA VARDAG"],
+    Hemförsäkring: ["IF SKADEFÖRS"],
+    LÅN_MoneyGo: ["MONEYGO AB"],
+    LÅN_SEB: ["LÅNEOMS"],
+    El: ["MÖLNDAL ENERGI AB"],
+    Telefon: ["TELENOR", "VIMLA"],
+    Abonnemang: ["FRISKTANDV", "GOTEBORGS-PO", "UNIONEN", "UNION.AKASSA"],
+  };
+
+  // only add objectPermExpense from combinedCategories into objectPermExpense
+  const permExpense = {};
+  for (const [key, value] of Object.entries(combinedExpensesData2)) {
+    const matchedKey = Object.keys(objectPermExpense).find((objKey) =>
+      objectPermExpense[objKey].includes(key)
+    );
+    if (matchedKey) {
+      if (!permExpense[matchedKey]) {
+        permExpense[matchedKey] = [];
+      }
+      permExpense[matchedKey] = [...permExpense[matchedKey], ...value];
+    }
+  }
+
+  const objectCustomExpense = {
+    Okänd: ["1232900371", "1233199221", "1236218176", "1236417380"],
+    Räkning: ["VISMA FINANCIAL SOLUTION"],
+    Hälsa: ["APOTEKET AB", "REGIONSERVICE PATIENTFAK"],
+    Nöje: [
+      "AMAZONRETAIL",
+      "K*SPELBUTIKE",
+      "RIOT  AE3N32",
+      "RIOT  AE35HZ",
+      "HAGABIONS CA",
+      "KJELL & CO 1",
+      "KJELL & CO 3",
+    ],
+    Present: ["DESIGNTORGET"],
+    Resor: ["VÄSTTRAFIK A", "VASTTRAFIK T"],
+    Träning: ["NORDICWELL", "SPORTLIFE M", "FTC MOLNDAL"],
+    Övrigt: [
+      "SAN FR",
+      "DUBLIN",
+      "DELABO",
+      "VÄSTRA GÖTAL",
+      "BJORKAFRIHET",
+      "BILLOGRAM",
+      "WH GOTEBORG",
+      "SAN FRANSICO",
+      "SAN FRANCISC",
+      "WH GOTEBORG ",
+      "GÖTEBORGS UN",
+      "K*ETSY.COM",
+      "EC STATIONS",
+      "AKADEMIBOKHA",
+    ],
+    Mat: [
+      "WILLYS GOTEB",
+      "WILLYS HEMMA",
+      "WILLY:S AB",
+      "LIDL 346",
+      "HEMKOP",
+      "HEMKOP GOTEG",
+      "HEMKOP TROLL",
+      "NYTTIG",
+    ],
+    Utemat: [
+      "FLODAJERNVEG",
+      "LILLA TOKYO",
+      "KROKSLATTS L",
+      "KROKSLATTS S",
+      "SALTES RESTA",
+      "7-ELEVEN GBG",
+      "7ELEVEN GBG",
+      "4415193 7-EL",
+      "4128113 PRES",
+      "4028150 PRES",
+      "LE SUSHIBAR ",
+      "ESPRESSO H 2",
+      "K*FOODORA AB",
+      "NYTTIG SNABB",
+      "PIZZA 4 YOU",
+      "ONEFOOD",
+      "OAKVILLE",
+      "NW GOTEBORG",
+      "LE SUSHIBAR",
+      "DELABOLE",
+    ],
+  };
+
+  const customExpense = {};
+  for (const [key, value] of Object.entries(combinedExpensesData2)) {
+    const matchedKey = Object.keys(objectCustomExpense).find((objKey) =>
+      objectCustomExpense[objKey].includes(key)
+    );
+    if (matchedKey) {
+      if (!customExpense[matchedKey]) {
+        customExpense[matchedKey] = [];
+      }
+      customExpense[matchedKey] = [...customExpense[matchedKey], ...value];
+    }
+  }
 
   return {
     props: {
       moreData: {
         income: objectIncome,
         expense: sortedExpensesData,
-        expenseMat: combinedExpensesData,
         expenseCat: combinedExpensesData2,
-        expenseCat2: combinedCategories,
+        expenseCat2: sortedData,
+        permExpense: permExpense,
+        customExpense: customExpense,
       },
       data: fileData,
     },
   };
-
-  const api = await fetch("https://dummyjson.com/products?limit=100");
-  const data = await api.json();
-  return { props: { data } };
 }

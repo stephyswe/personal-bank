@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import DataTable from "react-data-table-component";
 
 const Layout = ({
@@ -17,7 +17,55 @@ const Layout = ({
   const [incomeObj, setIncomeObj] = useState(moreData.income);
   const [expObj, setExpObj] = useState(moreData.expense);
 
-  console.log("combinedExpensesData2", moreData.expenseCat);
+  const TableHeaderRow = ({ headers }) => (
+    <tr>
+      {headers.map((header, index) => (
+        <th key={index}>{header}</th>
+      ))}
+    </tr>
+  );
+
+  const TableDataRow = ({ id, data }) => (
+    <tr>
+      <td className="text-left">{id}</td>
+      {data.map((datum, index) => (
+        <td key={index}>{datum}</td>
+      ))}
+    </tr>
+  );
+
+  const headersTop = [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+  ];
+  const headersYear = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "Maj",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Okt",
+    "Nov",
+    "Dec",
+  ];
+
+  const TrTop = () => <TableHeaderRow headers={headersTop} />;
+  const TrYear = ({ id }) => <TableDataRow id={id} data={headersYear} />;
 
   function NewTR() {
     return (
@@ -38,6 +86,7 @@ const Layout = ({
             href="https://adeyusuf.site"
             target="_blank"
             className="text-blue-500"
+            rel="noreferrer"
           >
             Created By &copy; Ade Yusuf
           </a>
@@ -49,119 +98,58 @@ const Layout = ({
           </div>
           <table>
             <thead>
-              <tr>
-                <th>A</th>
-                <th>B</th>
-                <th>C</th>
-                <th>D</th>
-                <th>E</th>
-                <th>F</th>
-                <th>G</th>
-                <th>H</th>
-                <th>I</th>
-                <th>J</th>
-                <th>K</th>
-                <th>L</th>
-                <th>M</th>
-              </tr>
-              <tr>
-                <th className="text-left">Sammanställning</th>
-                <th>Jan</th>
-                <th>Feb</th>
-                <th>Mar</th>
-                <th>Apr</th>
-                <th>Maj</th>
-                <th>Jun</th>
-                <th>Jul</th>
-                <th>Aug</th>
-                <th>Sep</th>
-                <th>Okt</th>
-                <th>Nov</th>
-                <th>Dec</th>
-              </tr>
-              <tr>
-                <th className="text-left">Kassa i början</th>
-                <th>18681</th>
-                <th>X</th>
-                <th>X</th>
-                <th>X</th>
-                <th>X</th>
-                <th>X</th>
-                <th>X</th>
-                <th>X</th>
-                <th>X</th>
-                <th>X</th>
-                <th>X</th>
-                <th>X</th>
-              </tr>
+              <TrTop />
+            </thead>
+            <tbody>
+              <TrYear id="Sammanställning" />
+              <DataSumTotal
+                id="Kassa i början"
+                income={incomeObj}
+                expenses={expObj}
+                startVal={18772}
+                hasStart={true}
+              />
+              <NewTR />
+              <DataSum
+                id="Utbetalningar - custom"
+                data={moreData.customExpense}
+              />
+              <DataSum id="Utbetalningar - perm" data={moreData.permExpense} />
+              <NewTR />
               <DataSum id="Månadens inbetalningar" data={incomeObj} />
               <DataSum id="Månadens utbetalningar" data={expObj} />
               <DataSumTotal
-                id="Månadens totala inbetalningar"
+                id="Kassa i slutet"
                 income={incomeObj}
                 expenses={expObj}
+                startVal={18772}
               />
-              <tr>
-                <th className="text-left">Kassa i slutet</th>
-                <th>2</th>
-                <th>X</th>
-                <th>X</th>
-                <th>X</th>
-                <th>X</th>
-                <th>X</th>
-                <th>X</th>
-                <th>X</th>
-                <th>X</th>
-                <th>X</th>
-                <th>X</th>
-                <th>X</th>
-              </tr>
               <NewTR />
               <NewTR />
-
-              <tr>
-                <td>Inbetalningar</td>
-                <th>Jan</th>
-                <th>Feb</th>
-                <th>Mar</th>
-                <th>Apr</th>
-                <th>Maj</th>
-                <th>Jun</th>
-                <th>Jul</th>
-                <th>Aug</th>
-                <th>Sep</th>
-                <th>Okt</th>
-                <th>Nov</th>
-                <th>Dec</th>
-              </tr>
+              <TrYear id="Inbetalningar" />
               <DataComponent data={incomeObj} />
+              <NewTR />
+              <TrYear id="Perm Exp" />
+              <DataComponentCombineCategories data={moreData.permExpense} />
+              <NewTR />
+              <TrYear id="Custom Exp" />
+              <DataComponentCombineCategories data={moreData.customExpense} />
+              <NewTR />
 
               <NewTR />
-              <NewTR />
-              {/* <tr>
-                <td>Utbetalningar (Kategorier)</td>
-              </tr>
-              <DataComponentCombineCategories data={moreData.expenseCat2} /> */}
+              <TrYear id="Utbetalningar (Kategorier)" />
+              <TableRow
+                data={{
+                  name: "Kategori",
+                  age: 2,
+                  email: "2@",
+                }}
+              />
+              <DataComponentCombineCategories data={moreData.expenseCat2} />
 
               <NewTR />
-              <tr>
-                <td>Utbetalningar</td>
-                <th>Jan</th>
-                <th>Feb</th>
-                <th>Mar</th>
-                <th>Apr</th>
-                <th>Maj</th>
-                <th>Jun</th>
-                <th>Jul</th>
-                <th>Aug</th>
-                <th>Sep</th>
-                <th>Okt</th>
-                <th>Nov</th>
-                <th>Dec</th>
-              </tr>
-            </thead>
-            <tbody>
-              <DataComponentCombine data={expObj} />
+              <TrYear id="Utbetalningar" />
+              <DataComponent data={expObj} />
             </tbody>
           </table>
         </div>
@@ -233,67 +221,33 @@ const Layout = ({
   );
 };
 
-const DataSumTotal = ({ income, expenses, id }) => {
-  // add the belopp values of each key in data object based on the month
-  const getMonthlySums = (income) => {
-    const sums = Array.from({ length: 12 }, () => 0);
-    Object.values(income).forEach((item) => {
-      item.forEach((innerItem) => {
-        const month = Number(innerItem.bokford.slice(5, 7)) - 1;
-        if (Number.isInteger(month)) sums[month] += innerItem.belopp;
-      });
-    });
-    return sums;
-  };
-
-  const inc = getMonthlySums(income);
-  const exp = getMonthlySums(expenses);
-
-  // take two arrays and subtract the values of each index and create new array
-  const subtractArrays = (arr1, arr2) => {
-    const result = [];
-    for (let i = 0; i < arr1.length; i++) {
-      result.push(arr1[i] - arr2[i]);
+// take two arrays and subtract the values of each index and create new array
+const subtractArrays = (arr1, arr2) => {
+  const result = [];
+  for (let i = 0; i < arr1.length; i++) {
+    if (i > 0) {
+      result.push(arr1[i] + arr2[i] + result[i - 1]);
+    } else {
+      result.push(arr1[i] + arr2[i]);
     }
-    return result;
-  };
-
-  return (
-    <tr>
-      <td>{id}</td>
-      {subtractArrays(inc, exp).map((item, index) => (
-        <td key={index}>{parseInt(item)}</td>
-      ))}
-    </tr>
-  );
+  }
+  return result;
 };
 
-const DataSum = ({ data, id }) => {
-  // add the belopp values of each key in data object based on the month
-  const getMonthlySums = (data) => {
-    const sums = Array.from({ length: 12 }, () => 0);
-    Object.values(data).forEach((item) => {
-      item.forEach((innerItem) => {
-        const month = Number(innerItem.bokford.slice(5, 7)) - 1;
-        if (Number.isInteger(month)) sums[month] += innerItem.belopp;
-      });
+const getMonthlySums = (value) => {
+  const sums = Array.from({ length: 12 }, () => 0);
+  Object.values(value).forEach((item) => {
+    item.forEach((innerItem) => {
+      const month = Number(innerItem.bokford.slice(5, 7)) - 1;
+      if (Number.isInteger(month)) sums[month] += innerItem.belopp;
     });
-    return sums;
-  };
-
-  return (
-    <tr>
-      <td>{id}</td>
-      {getMonthlySums(data).map((item, index) => (
-        <td key={index}>{parseInt(item)}</td>
-      ))}
-    </tr>
-  );
+  });
+  return sums;
 };
 
 const months = [
   "01",
-  /* "02",
+  "02",
   "03",
   "04",
   "05",
@@ -303,11 +257,58 @@ const months = [
   "09",
   "10",
   "11",
-  "12", */
+  "12",
 ];
 
-const DataComponent = ({ data }) => {
-  const beloppValues = Object.values(data).map((item) => {
+const filterAndFillData = (income, expenses, startVal, hasStart) => {
+  let inc = getMonthlySums(income);
+  inc[0] += startVal;
+  const exp = getMonthlySums(expenses);
+  const newArr = subtractArrays(inc, exp);
+  if (hasStart) {
+    newArr.unshift(18772);
+  }
+  const incVal = hasStart ? 1 : 0;
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth();
+  const filteredData = newArr.filter(
+    (_, index) => index - incVal < currentMonth
+  );
+  const filledData = new Array(12).fill(".");
+  filteredData.forEach((item, index) => {
+    filledData[index + incVal] = item;
+  });
+  if (hasStart) {
+    filledData.shift();
+    filledData.push(".");
+  }
+  return filledData.map((item) =>
+    typeof item === "number" ? parseInt(item) : item
+  );
+};
+
+const DataSumTotal = ({ income, expenses, id, startVal, hasStart }) => (
+  <tr>
+    <td>{id}</td>
+    {filterAndFillData(income, expenses, startVal, hasStart).map(
+      (item, index) => (
+        <td key={index}>{item}</td>
+      )
+    )}
+  </tr>
+);
+
+const DataSum = ({ data, id }) => (
+  <tr>
+    <td>{id}</td>
+    {getMonthlySums(data).map((item, index) => (
+      <td key={index}>{item === 0 ? "." : parseInt(item)}</td>
+    ))}
+  </tr>
+);
+
+const beloppValues = (data) => {
+  return Object.values(data).map((item) => {
     const beloppArr = months.map((month) => {
       const monthData = item.find(
         (innerItem) => innerItem.bokford.slice(5, 7) === month
@@ -318,53 +319,31 @@ const DataComponent = ({ data }) => {
       ? item.map(() => ".")
       : beloppArr;
   });
-
-  return (
-    <>
-      {Object.keys(data).map((key, index) => {
-        return (
-          <tr key={index}>
-            <td>{key}</td>
-            {beloppValues[index].map((belopp, innerIndex) => (
-              <td key={innerIndex}>{belopp}</td>
-            ))}
-          </tr>
-        );
-      })}
-    </>
-  );
 };
 
-const DataComponentCombine = ({ data }) => {
-  const beloppValues = Object.values(data).map((item) => {
-    const beloppArr = months.map((month) => {
-      const monthData = item.find(
-        (innerItem) => innerItem.bokford.slice(5, 7) === month
+const DataComponent = ({ data }) => (
+  <>
+    {Object.keys(data).map((key, index) => {
+      return (
+        <tr key={index}>
+          <td>{key}</td>
+          {beloppValues(data)[index].map((belopp, innerIndex) => (
+            <td key={innerIndex}>{belopp}</td>
+          ))}
+        </tr>
       );
-      return monthData ? monthData.belopp : ".";
-    });
-    return beloppArr.every((belopp) => belopp === ".")
-      ? item.map(() => ".")
-      : beloppArr;
-  });
-
-  return (
-    <>
-      {Object.keys(data).map((key, index) => {
-        return (
-          <tr key={index}>
-            <td>{key}</td>
-            {beloppValues[index].map((belopp, innerIndex) => (
-              <td key={innerIndex}>{belopp}</td>
-            ))}
-          </tr>
-        );
-      })}
-    </>
-  );
-};
+    })}
+  </>
+);
 
 const DataComponentCombineCategories = ({ data }) => {
+  const [openKey, setOpenKey] = useState("");
+
+  const handleClick = (key) => {
+    if (key === openKey) return setOpenKey("");
+    setOpenKey(key);
+  };
+
   const beloppValues = Object.values(data).map((item) => {
     const beloppArr = months.map((month) => {
       const monthData = item.find(
@@ -381,20 +360,65 @@ const DataComponentCombineCategories = ({ data }) => {
       : beloppArr;
   });
 
+  // check if Object.keys(data).map has more then one item with same text
+  const hasSameText = Object.keys(data).map((key) => {
+    const textArr = data[key].map((item) => item.text);
+    return textArr.some((text, index) => textArr.indexOf(text) !== index);
+  });
+
   return (
     <>
       {Object.keys(data).map((key, index) => {
         return (
-          <tr key={index}>
-            <td>{key}</td>
-            {beloppValues[index].map((belopp, innerIndex) => (
-              <td key={innerIndex}>
-                {belopp === "." ? belopp : parseInt(belopp)}
-              </td>
-            ))}
-          </tr>
+          <>
+            <tr
+              className="cursor-pointer"
+              key={index}
+              onClick={() => handleClick(key)}
+            >
+              <td>{key}</td>
+              {beloppValues[index].map((belopp, innerIndex) => (
+                <td key={innerIndex}>
+                  {belopp === "." ? belopp : parseInt(belopp)}
+                </td>
+              ))}
+            </tr>
+            {key === openKey && (
+              <>
+                {data[key].map((item, innerIndex) => (
+                  <tr key={innerIndex}>
+                    <td>{item.text}</td>
+                    <td>{item.belopp}</td>
+                  </tr>
+                ))}
+              </>
+            )}
+          </>
         );
       })}
+    </>
+  );
+};
+
+const TableRow = ({ data }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleClick = () => {
+    setIsOpen(!isOpen);
+  };
+
+  return (
+    <>
+      <tr onClick={handleClick}>
+        <td>{data.name}</td>
+        <td>{data.age}</td>
+        <td>{data.email}</td>
+      </tr>
+      {isOpen && (
+        <tr>
+          <td colSpan="3">Detail view for {data.name}</td>
+        </tr>
+      )}
     </>
   );
 };

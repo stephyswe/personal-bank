@@ -29,8 +29,9 @@ const columns = [
     selector: (row) => row.belopp,
   },
   {
-    name: "Stocks",
-    selector: (row) => `Rp. ${(row.price * 15000).toLocaleString("id-ID")}`,
+    name: "Saldo",
+    selector: (row) => row.saldo,
+    // selector: (row) => `Rp. ${(row.price * 15000).toLocaleString("id-ID")}`,
     sortable: true,
   },
 ];
@@ -43,8 +44,6 @@ const MainProgram = ({ data, moreData }) => {
   useEffect(() => {
     setTableData(data);
   }, [data]);
-
-  // console.log("tableData", tableData);
 
   // Mengubah data dari excel menjadi array
   const convertToArray = (data) => {
