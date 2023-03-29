@@ -1,8 +1,24 @@
 import { useState } from "react";
 import DataTable from "react-data-table-component";
+import { headersTop, headersYear, objRemoveKeysDate } from "../pages";
 
 const Layout = ({
-  moreData,
+  data: {
+    incAtStart,
+    expCustom,
+    expSolid,
+    incTotal,
+    expTotal,
+    total,
+    incomeBetter,
+    expSolidCat,
+    expCustomCat,
+    permExpense,
+    customExpense,
+    expAllCat,
+    expAll,
+    expAllNew,
+  },
   tableData,
   showModal,
   setShowModal,
@@ -10,70 +26,9 @@ const Layout = ({
   importExcel,
   exportExcel,
   apiData,
-  data,
   buttonExport,
   setButtonExport,
 }) => {
-  const [incomeObj, setIncomeObj] = useState(moreData.income);
-  const [expObj, setExpObj] = useState(moreData.expense);
-
-  const TableHeaderRow = ({ headers }) => (
-    <tr>
-      {headers.map((header, index) => (
-        <th key={index}>{header}</th>
-      ))}
-    </tr>
-  );
-
-  const TableDataRow = ({ id, data }) => (
-    <tr>
-      <td className="text-left">{id}</td>
-      {data.map((datum, index) => (
-        <td key={index}>{datum}</td>
-      ))}
-    </tr>
-  );
-
-  const headersTop = [
-    "A",
-    "B",
-    "C",
-    "D",
-    "E",
-    "F",
-    "G",
-    "H",
-    "I",
-    "J",
-    "K",
-    "L",
-    "M",
-  ];
-  const headersYear = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "Maj",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Okt",
-    "Nov",
-    "Dec",
-  ];
-
-  const TrTop = () => <TableHeaderRow headers={headersTop} />;
-  const TrYear = ({ id }) => <TableDataRow id={id} data={headersYear} />;
-
-  function NewTR() {
-    return (
-      <tr>
-        <td>.</td>
-      </tr>
-    );
-  }
   // Komponen datatable
   return (
     <div className="bg-gray-300 min-h-screen h-full">
@@ -98,115 +53,53 @@ const Layout = ({
           </div>
           <table>
             <thead>
-              <TrTop />
+              <CellTop />
             </thead>
             <tbody>
-              <TrYear id="Sammanställning" />
-              <DataSumTotal
+              <CellYear id="Sammanställning" />
+              <DataCell
                 id="Kassa i början"
-                income={incomeObj}
-                expenses={expObj}
-                startVal={18772}
-                hasStart={true}
+                data={incAtStart}
+                renderAsIntegers={true}
               />
-              <NewTR />
-              <DataSum
-                id="Utbetalningar - custom"
-                data={moreData.customExpense}
-              />
-              <DataSum id="Utbetalningar - perm" data={moreData.permExpense} />
-              <NewTR />
-              <DataSum id="Månadens inbetalningar" data={incomeObj} />
-              <DataSum id="Månadens utbetalningar" data={expObj} />
-              <DataSumTotal
+              <CellNew />
+              <DataCell id="Utbetalningar - Fasta" data={expSolid} />
+              <DataCell id="Utbetalningar - Spridda" data={expCustom} />
+              <CellNew />
+              <DataCell id="Månadens inbetalningar" data={incTotal} />
+              <DataCell id="Månadens utbetalningar" data={expTotal} />
+              <DataCell
                 id="Kassa i slutet"
-                income={incomeObj}
-                expenses={expObj}
-                startVal={18772}
+                data={total}
+                renderAsIntegers={true}
               />
-              <NewTR />
-              <NewTR />
-              <TrYear id="Inbetalningar" />
-              <DataComponent data={incomeObj} />
-              <NewTR />
-              <TrYear id="Kommande utgifter" />
-              <DataComponentCombineCategories data={moreData.permExpense} />
-              <NewTR />
-              <TrYear id="Spridda utgifter" />
-              <DataComponentCombineCategories data={moreData.customExpense} />
-              <NewTR />
+              <CellNew />
+              <CellNew />
+              <CellYear id="Inbetalningar" />
+              <DataComponent data={incomeBetter} />
+              <CellNew />
+              <CellYear id="Fasta utgifter" />
+              <DataCatCell data={permExpense} dataCat={expSolidCat} />
+              <CellNew />
+              <CellYear id="Spridda utgifter" />
+              <DataCatCell data={customExpense} dataCat={expCustomCat} />
+              <CellNew />
+              <CellYear id="Utbetalningar (Kategorier)" />
+              <DataCatCell data={expAll} dataCat={expAllCat} />
 
-              <NewTR />
-              <TrYear id="Utbetalningar (Kategorier)" />
-              <TableRow
-                data={{
-                  name: "Kategori",
-                  age: 2,
-                  email: "2@",
-                }}
-              />
-              <DataComponentCombineCategories data={moreData.expenseCat2} />
-
-              <NewTR />
-              <TrYear id="Utbetalningar" />
-              <DataComponent data={expObj} />
+              <CellNew />
+              <CellYear id="Utbetalningar" />
+              <DataComponent data={expAllNew} />
             </tbody>
           </table>
         </div>
 
         <div className="block bg-white p-10">
-          <div className="flex justify-between items-center w-full mb-5">
-            <h3 className="font-medium text-2xl text-gray-70">Product List</h3>
-            <div className="relative flex gap-3 items-center">
-              {tableData.length > 0 && buttonExport ? (
-                <button
-                  className="px-10 py-3 bg-purple-500 text-white outline-none font-semibold shadow-lg shadow-purple-300 hover:shadow-none transition duration-300 ease-linear"
-                  onClick={() => exportExcel(tableData)}
-                >
-                  Eksport CSV
-                </button>
-              ) : (
-                <></>
-              )}
-              <button
-                className="px-10 py-3 border relative border-blue-500 text-blue-500"
-                onClick={() => setShowModal(true)}
-              >
-                Select Data
-                {showModal ? (
-                  <div className="flex flex-col gap-2 items-start absolute right-0 top-full w-[200px] p-3 bg-white z-10 rounded-md shadow-lg border border-gray-300 transition-all duration-500 ease-in mt-3">
-                    <a
-                      className="ml-3 mt-1 cursor-pointer text-gray-800 transtion-all duration-300 ease-in hover:text-blue-400"
-                      onClick={() => {
-                        apiData(data);
-                      }}
-                    >
-                      From Api
-                    </a>
-                    <div className="block">
-                      <label
-                        className="ml-3 mt-1 cursor-pointer text-gray-800 transtion-all duration-300 ease-in hover:text-blue-400"
-                        htmlFor="file"
-                        onClick={() => {
-                          setButtonExport(!buttonExport);
-                        }}
-                      >
-                        From Excel
-                      </label>
-                      <input
-                        className="hidden"
-                        id="file"
-                        onChange={importExcel}
-                        type="file"
-                      />
-                    </div>
-                  </div>
-                ) : (
-                  ""
-                )}
-              </button>
-            </div>
-          </div>
+          <ProdList
+            tableData={tableData}
+            showModal={showModal}
+            buttonExport={buttonExport}
+          />
           <DataTable
             data={tableData}
             columns={columns}
@@ -221,29 +114,88 @@ const Layout = ({
   );
 };
 
-// take two arrays and subtract the values of each index and create new array
-const subtractArrays = (arr1, arr2) => {
-  const result = [];
-  for (let i = 0; i < arr1.length; i++) {
-    if (i > 0) {
-      result.push(arr1[i] + arr2[i] + result[i - 1]);
-    } else {
-      result.push(arr1[i] + arr2[i]);
-    }
-  }
-  return result;
+const TableHeaderRow = ({ headers }) => (
+  <tr>
+    {headers.map((header, index) => (
+      <th key={index}>{header}</th>
+    ))}
+  </tr>
+);
+
+const TableDataRow = ({ id, data }) => (
+  <tr>
+    <td className="text-left">{id}</td>
+    {data.map((datum, index) => (
+      <td key={index}>{datum}</td>
+    ))}
+  </tr>
+);
+
+const CellTop = () => <TableHeaderRow headers={headersTop} />;
+const CellYear = ({ id }) => <TableDataRow id={id} data={headersYear} />;
+
+const ProdList = ({ tableData, showModal, buttonExport }) => {
+  return (
+    <div className="flex justify-between items-center w-full mb-5">
+      <h3 className="font-medium text-2xl text-gray-70">Product List</h3>
+      <div className="relative flex gap-3 items-center">
+        {tableData.length > 0 && buttonExport ? (
+          <button
+            className="px-10 py-3 bg-purple-500 text-white outline-none font-semibold shadow-lg shadow-purple-300 hover:shadow-none transition duration-300 ease-linear"
+            onClick={() => exportExcel(tableData)}
+          >
+            Eksport CSV
+          </button>
+        ) : (
+          <></>
+        )}
+        <button
+          className="px-10 py-3 border relative border-blue-500 text-blue-500"
+          onClick={() => setShowModal(true)}
+        >
+          Select Data
+          {showModal ? (
+            <div className="flex flex-col gap-2 items-start absolute right-0 top-full w-[200px] p-3 bg-white z-10 rounded-md shadow-lg border border-gray-300 transition-all duration-500 ease-in mt-3">
+              <a
+                className="ml-3 mt-1 cursor-pointer text-gray-800 transtion-all duration-300 ease-in hover:text-blue-400"
+                onClick={() => {
+                  apiData(data);
+                }}
+              >
+                From Api
+              </a>
+              <div className="block">
+                <label
+                  className="ml-3 mt-1 cursor-pointer text-gray-800 transtion-all duration-300 ease-in hover:text-blue-400"
+                  htmlFor="file"
+                  onClick={() => {
+                    setButtonExport(!buttonExport);
+                  }}
+                >
+                  From Excel
+                </label>
+                <input
+                  className="hidden"
+                  id="file"
+                  onChange={importExcel}
+                  type="file"
+                />
+              </div>
+            </div>
+          ) : (
+            ""
+          )}
+        </button>
+      </div>
+    </div>
+  );
 };
 
-const getMonthlySums = (value) => {
-  const sums = Array.from({ length: 12 }, () => 0);
-  Object.values(value).forEach((item) => {
-    item.forEach((innerItem) => {
-      const month = Number(innerItem.bokford.slice(5, 7)) - 1;
-      if (Number.isInteger(month)) sums[month] += innerItem.belopp;
-    });
-  });
-  return sums;
-};
+const CellNew = () => (
+  <tr>
+    <td>.</td>
+  </tr>
+);
 
 const months = [
   "01",
@@ -260,49 +212,17 @@ const months = [
   "12",
 ];
 
-const filterAndFillData = (income, expenses, startVal, hasStart) => {
-  let inc = getMonthlySums(income);
-  inc[0] += startVal;
-  const exp = getMonthlySums(expenses);
-  const newArr = subtractArrays(inc, exp);
-  if (hasStart) {
-    newArr.unshift(18772);
-  }
-  const incVal = hasStart ? 1 : 0;
-  const currentDate = new Date();
-  const currentMonth = currentDate.getMonth();
-  const filteredData = newArr.filter(
-    (_, index) => index - incVal < currentMonth + 1
-  );
-  const filledData = new Array(12).fill(".");
-  filteredData.forEach((item, index) => {
-    filledData[index + incVal] = item;
-  });
-  if (hasStart) {
-    filledData.shift();
-    filledData.push(".");
-  }
-  return filledData.map((item) =>
-    typeof item === "number" ? parseInt(item) : item
-  );
-};
-
-const DataSumTotal = ({ income, expenses, id, startVal, hasStart }) => (
+const DataCell = ({ id, data, renderAsIntegers }) => (
   <tr>
     <td>{id}</td>
-    {filterAndFillData(income, expenses, startVal, hasStart).map(
-      (item, index) => (
-        <td key={index}>{item}</td>
-      )
-    )}
-  </tr>
-);
-
-const DataSum = ({ data, id }) => (
-  <tr>
-    <td>{id}</td>
-    {getMonthlySums(data).map((item, index) => (
-      <td key={index}>{item === 0 ? "." : parseInt(item)}</td>
+    {data.map((item, index) => (
+      <td key={index}>
+        {!renderAsIntegers && item !== 0
+          ? parseInt(item)
+          : item === 0
+          ? "."
+          : item}
+      </td>
     ))}
   </tr>
 );
@@ -336,29 +256,16 @@ const DataComponent = ({ data }) => (
   </>
 );
 
-const DataComponentCombineCategories = ({ data }) => {
+const DataCatCell = ({ dataCat, data }) => {
   const [openKey, setOpenKey] = useState("");
-
-  const handleClick = (key) => {
+  const [objData, setObjData] = useState({});
+  const onClick = (key) => {
+    setObjData(objRemoveKeysDate(handleDatOnClick(data[key])));
     if (key === openKey) return setOpenKey("");
-    setOpenKey(key);
+    if (Object.keys(handleDatOnClick(data[key])).length > 1) {
+      setOpenKey(key);
+    }
   };
-
-  const beloppValues = Object.values(data).map((item) => {
-    const beloppArr = months.map((month) => {
-      const monthData = item.find(
-        (innerItem) => innerItem.bokford.slice(5, 7) === month
-      );
-      if (!monthData) return ".";
-      const beloppSum = item
-        .filter((innerItem) => innerItem.bokford.slice(5, 7) === month)
-        .reduce((sum, innerItem) => sum + innerItem.belopp, 0);
-      return beloppSum;
-    });
-    return beloppArr.every((belopp) => belopp === ".")
-      ? item.map(() => ".")
-      : beloppArr;
-  });
 
   return (
     <>
@@ -368,10 +275,10 @@ const DataComponentCombineCategories = ({ data }) => {
             <tr
               className="cursor-pointer"
               key={index}
-              onClick={() => handleClick(key)}
+              onClick={() => onClick(key)}
             >
               <td>{key}</td>
-              {beloppValues[index].map((belopp, innerIndex) => {
+              {dataCat[index].map((belopp, innerIndex) => {
                 return (
                   <td key={innerIndex}>
                     {belopp === "." ? belopp : parseInt(belopp)}
@@ -379,16 +286,7 @@ const DataComponentCombineCategories = ({ data }) => {
                 );
               })}
             </tr>
-            {key === openKey && (
-              <>
-                {data[key].map((item, innerOpenIndex) => (
-                  <tr key={innerOpenIndex}>
-                    <td>{item.text}</td>
-                    <td>{item.belopp}</td>
-                  </tr>
-                ))}
-              </>
-            )}
+            {key === openKey && <DataComponent data={objData} />}
           </>
         );
       })}
@@ -396,27 +294,15 @@ const DataComponentCombineCategories = ({ data }) => {
   );
 };
 
-const TableRow = ({ data }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const handleClick = () => {
-    setIsOpen(!isOpen);
-  };
-
-  return (
-    <>
-      <tr onClick={handleClick}>
-        <td>{data.name}</td>
-        <td>{data.age}</td>
-        <td>{data.email}</td>
-      </tr>
-      {isOpen && (
-        <tr>
-          <td colSpan="3">Detail view for {data.name}</td>
-        </tr>
-      )}
-    </>
-  );
-};
+function handleDatOnClick(data) {
+  return data.reduce((acc, obj) => {
+    const key = obj.text;
+    if (!acc[key]) {
+      acc[key] = [];
+    }
+    acc[key].push(obj);
+    return acc;
+  }, {});
+}
 
 export default Layout;

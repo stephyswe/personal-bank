@@ -37,14 +37,14 @@ const columns = [
   },
 ];
 
-const MainProgram = ({ data, moreData }) => {
+const MainProgram = ({ data }) => {
   const [tableData, setTableData] = useState([]);
   const [buttonExport, setButtonExport] = useState(true);
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    setTableData(data);
-  }, [data]);
+    setTableData(data.fileData);
+  }, [data.fileData]);
 
   // Mengubah data dari excel menjadi array
   const convertToArray = (data) => {
@@ -91,7 +91,6 @@ const MainProgram = ({ data, moreData }) => {
   // Untuk menampilkan data kedalam datatable
   return (
     <Layout
-      moreData={moreData}
       tableData={tableData}
       showModal={showModal}
       setShowModal={setShowModal}
@@ -99,9 +98,9 @@ const MainProgram = ({ data, moreData }) => {
       apiData={apiData}
       importExcel={importExcel}
       exportExcel={exportExcel}
-      data={data}
       buttonExport={buttonExport}
       setButtonExport={setButtonExport}
+      data={data}
     />
   );
 };
