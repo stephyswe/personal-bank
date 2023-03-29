@@ -9,8 +9,19 @@ const Layout = ({ newData, tableData, showModal, columns, buttonExport }) => {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    if (initData) convertData(initData.fileData, setData);
+    if (initData) convertData(initData, setData);
   }, [initData]);
+
+  const onClick = () => {
+    convertData(changeDate(initData), setData);
+  };
+
+  function changeDate(data) {
+    return data.filter((item) => {
+      const date = new Date(item.bokford);
+      return date >= new Date("2023-03-01");
+    });
+  }
 
   return (
     <div className="bg-gray-300 min-h-screen h-full">
@@ -33,6 +44,7 @@ const Layout = ({ newData, tableData, showModal, columns, buttonExport }) => {
           <div className="flex justify-between items-center w-full mb-5">
             <h3 className="font-medium text-2xl text-gray-70">Tab List</h3>
           </div>
+          <button onClick={onClick}>Change</button>
           {data && <DataMain data={data} />}
         </div>
 
@@ -106,7 +118,6 @@ const DataMain = ({
         <CellNew />
         <CellYear id="Utbetalningar (Kategorier)" />
         <DataCatCell data={expAll} dataCat={expAllCat} />
-
         <CellNew />
         <CellYear id="Utbetalningar" />
         <DataComponent data={expAllNew} />

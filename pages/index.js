@@ -40,9 +40,7 @@ export async function getStaticProps() {
 
   return {
     props: {
-      data: {
-        fileData,
-      },
+      data: fileData,
     },
   };
 }

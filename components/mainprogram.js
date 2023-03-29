@@ -43,8 +43,8 @@ const MainProgram = ({ data }) => {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    setTableData(data.fileData);
-  }, [data.fileData]);
+    setTableData(data);
+  }, [data]);
 
   // Mengubah data dari excel menjadi array
   const convertToArray = (data) => {
