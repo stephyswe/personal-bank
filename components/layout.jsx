@@ -272,7 +272,7 @@ const filterAndFillData = (income, expenses, startVal, hasStart) => {
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth();
   const filteredData = newArr.filter(
-    (_, index) => index - incVal < currentMonth
+    (_, index) => index - incVal < currentMonth + 1
   );
   const filledData = new Array(12).fill(".");
   filteredData.forEach((item, index) => {
@@ -360,12 +360,6 @@ const DataComponentCombineCategories = ({ data }) => {
       : beloppArr;
   });
 
-  // check if Object.keys(data).map has more then one item with same text
-  const hasSameText = Object.keys(data).map((key) => {
-    const textArr = data[key].map((item) => item.text);
-    return textArr.some((text, index) => textArr.indexOf(text) !== index);
-  });
-
   return (
     <>
       {Object.keys(data).map((key, index) => {
@@ -377,16 +371,18 @@ const DataComponentCombineCategories = ({ data }) => {
               onClick={() => handleClick(key)}
             >
               <td>{key}</td>
-              {beloppValues[index].map((belopp, innerIndex) => (
-                <td key={innerIndex}>
-                  {belopp === "." ? belopp : parseInt(belopp)}
-                </td>
-              ))}
+              {beloppValues[index].map((belopp, innerIndex) => {
+                return (
+                  <td key={innerIndex}>
+                    {belopp === "." ? belopp : parseInt(belopp)}
+                  </td>
+                );
+              })}
             </tr>
             {key === openKey && (
               <>
-                {data[key].map((item, innerIndex) => (
-                  <tr key={innerIndex}>
+                {data[key].map((item, innerOpenIndex) => (
+                  <tr key={innerOpenIndex}>
                     <td>{item.text}</td>
                     <td>{item.belopp}</td>
                   </tr>

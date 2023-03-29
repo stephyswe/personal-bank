@@ -27,6 +27,7 @@ const columns = [
   {
     name: "Belopp",
     selector: (row) => row.belopp,
+    sortable: true,
   },
   {
     name: "Saldo",

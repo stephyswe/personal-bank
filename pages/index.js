@@ -34,14 +34,32 @@ export async function getStaticProps() {
   // remove first 5 rows in data array
   fileData = fileData.splice(5, fileData.length - 1);
 
+  // remove all rows before 2023-01-01 in fileData
+  fileData = fileData.filter((item) => {
+    const date = new Date(item.bokford);
+    return date >= new Date("2023-01-01");
+  });
+
   // make before here.
   const startDate = new Date("2023-01-01");
   const endDate = new Date("2023-12-31");
 
   const filteredData = fileData.filter((item) => {
     const date = new Date(item.bokford);
+
+    if (date > new Date("2023-03-25")) {
+      item.saldo = "LAST";
+    }
     return date >= startDate && date <= endDate;
   });
+
+  console.log(
+    "filteredData",
+    filteredData.filter((item) => {
+      const date = new Date(item.bokford);
+      return date >= new Date("2023-03-25") && date <= new Date("2023-03-31");
+    })
+  );
 
   const objectIncome = {};
   const objectExpense = {};
