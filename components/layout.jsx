@@ -1,36 +1,17 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { headersTop, headersYear } from "../utils/data";
 import { objRemoveKeysDate } from "../utils/api";
-import { beloppValues, objWithKeys } from "../utils/common";
+import { beloppValues, convertData, objWithKeys } from "../utils/common";
 
-const Layout = ({
-  data: {
-    incAtStart,
-    expCustom,
-    expSolid,
-    incTotal,
-    expTotal,
-    total,
-    incomeBetter,
-    expSolidCat,
-    expCustomCat,
-    permExpense,
-    customExpense,
-    expAllCat,
-    expAll,
-    expAllNew,
-  },
-  tableData,
-  showModal,
-  setShowModal,
-  columns,
-  importExcel,
-  exportExcel,
-  apiData,
-  buttonExport,
-  setButtonExport,
-}) => {
+const Layout = ({ newData, tableData, showModal, columns, buttonExport }) => {
+  const [initData, setInitData] = useState(newData);
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    if (initData) convertData(initData.fileData, setData);
+  }, [initData]);
+
   return (
     <div className="bg-gray-300 min-h-screen h-full">
       <div className="py-20 px-[200px]">
@@ -52,47 +33,7 @@ const Layout = ({
           <div className="flex justify-between items-center w-full mb-5">
             <h3 className="font-medium text-2xl text-gray-70">Tab List</h3>
           </div>
-          <table>
-            <thead>
-              <CellTop />
-            </thead>
-            <tbody>
-              <CellYear id="Sammanställning" />
-              <DataCell
-                id="Kassa i början"
-                data={incAtStart}
-                renderAsIntegers={true}
-              />
-              <CellNew />
-              <DataCell id="Utbetalningar - Fasta" data={expSolid} />
-              <DataCell id="Utbetalningar - Spridda" data={expCustom} />
-              <CellNew />
-              <DataCell id="Månadens inbetalningar" data={incTotal} />
-              <DataCell id="Månadens utbetalningar" data={expTotal} />
-              <DataCell
-                id="Kassa i slutet"
-                data={total}
-                renderAsIntegers={true}
-              />
-              <CellNew />
-              <CellNew />
-              <CellYear id="Inbetalningar" />
-              <DataComponent data={incomeBetter} />
-              <CellNew />
-              <CellYear id="Fasta utgifter" />
-              <DataCatCell data={permExpense} dataCat={expSolidCat} />
-              <CellNew />
-              <CellYear id="Spridda utgifter" />
-              <DataCatCell data={customExpense} dataCat={expCustomCat} />
-              <CellNew />
-              <CellYear id="Utbetalningar (Kategorier)" />
-              <DataCatCell data={expAll} dataCat={expAllCat} />
-
-              <CellNew />
-              <CellYear id="Utbetalningar" />
-              <DataComponent data={expAllNew} />
-            </tbody>
-          </table>
+          {data && <DataMain data={data} />}
         </div>
 
         <div className="block bg-white p-10">
@@ -112,6 +53,65 @@ const Layout = ({
         </div>
       </div>
     </div>
+  );
+};
+
+const DataMain = ({
+  data: {
+    incAtStart,
+    expCustom,
+    expSolid,
+    incTotal,
+    expTotal,
+    total,
+    incomeBetter,
+    expSolidCat,
+    expCustomCat,
+    permExpense,
+    customExpense,
+    expAllCat,
+    expAll,
+    expAllNew,
+  },
+}) => {
+  return (
+    <table>
+      <thead>
+        <CellTop />
+      </thead>
+      <tbody>
+        <CellYear id="Sammanställning" />
+        <DataCell
+          id="Kassa i början"
+          data={incAtStart}
+          renderAsIntegers={true}
+        />
+        <CellNew />
+        <DataCell id="Utbetalningar - Fasta" data={expSolid} />
+        <DataCell id="Utbetalningar - Spridda" data={expCustom} />
+        <CellNew />
+        <DataCell id="Månadens inbetalningar" data={incTotal} />
+        <DataCell id="Månadens utbetalningar" data={expTotal} />
+        <DataCell id="Kassa i slutet" data={total} renderAsIntegers={true} />
+        <CellNew />
+        <CellNew />
+        <CellYear id="Inbetalningar" />
+        <DataComponent data={incomeBetter} />
+        <CellNew />
+        <CellYear id="Fasta utgifter" />
+        <DataCatCell data={permExpense} dataCat={expSolidCat} />
+        <CellNew />
+        <CellYear id="Spridda utgifter" />
+        <DataCatCell data={customExpense} dataCat={expCustomCat} />
+        <CellNew />
+        <CellYear id="Utbetalningar (Kategorier)" />
+        <DataCatCell data={expAll} dataCat={expAllCat} />
+
+        <CellNew />
+        <CellYear id="Utbetalningar" />
+        <DataComponent data={expAllNew} />
+      </tbody>
+    </table>
   );
 };
 

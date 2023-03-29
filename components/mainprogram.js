@@ -100,7 +100,7 @@ const MainProgram = ({ data }) => {
       exportExcel={exportExcel}
       buttonExport={buttonExport}
       setButtonExport={setButtonExport}
-      data={data}
+      newData={data}
     />
   );
 };

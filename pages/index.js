@@ -36,36 +36,12 @@ export default function Home({ data }) {
 }
 
 export async function getStaticProps() {
-  var fileData = getExcel("./pages/kontoutdrag.xlsx");
-
-  const objInc = groupByBelopp(fileData, true);
-  const objExp = sortDefault(groupByBelopp(fileData, false));
-  const objCombExp = objRemoveKeysDate(objExp);
-  const sortedData = sortByOrder(
-    objCatWithKeys(objCombExp, objectKeys),
-    customOrder
-  );
-  const permExpense = objCat(objCombExp, objectPermExpense);
-  const customExpense = objCat(objCombExp, objectCustomExpense);
+  const fileData = getExcel("./pages/kontoutdrag.xlsx");
 
   return {
     props: {
       data: {
         fileData,
-        incAtStart: filterAndFillData(objInc, objExp, 18772, true),
-        expCustom: getMonthlySums(customExpense),
-        expSolid: getMonthlySums(permExpense),
-        incTotal: getMonthlySums(objInc),
-        expTotal: getMonthlySums(objExp),
-        total: filterAndFillData(objInc, objExp, 18772),
-        expSolidCat: handleCategories(permExpense),
-        expCustomCat: handleCategories(customExpense),
-        permExpense,
-        customExpense,
-        expAllCat: handleCategories(sortedData),
-        expAll: sortedData,
-        incomeBetter: objInc,
-        expAllNew: objExp,
       },
     },
   };
