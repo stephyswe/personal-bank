@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import DataTable from "react-data-table-component";
-import { headersTop, headersYear, objRemoveKeysDate } from "../pages";
+import { headersTop, headersYear } from "../utils/data";
+import { objRemoveKeysDate } from "../utils/api";
+import { beloppValues, objWithKeys } from "../utils/common";
 
 const Layout = ({
   data: {
@@ -29,7 +31,6 @@ const Layout = ({
   buttonExport,
   setButtonExport,
 }) => {
-  // Komponen datatable
   return (
     <div className="bg-gray-300 min-h-screen h-full">
       <div className="py-20 px-[200px]">
@@ -197,21 +198,6 @@ const CellNew = () => (
   </tr>
 );
 
-const months = [
-  "01",
-  "02",
-  "03",
-  "04",
-  "05",
-  "06",
-  "07",
-  "08",
-  "09",
-  "10",
-  "11",
-  "12",
-];
-
 const DataCell = ({ id, data, renderAsIntegers }) => (
   <tr>
     <td>{id}</td>
@@ -226,20 +212,6 @@ const DataCell = ({ id, data, renderAsIntegers }) => (
     ))}
   </tr>
 );
-
-const beloppValues = (data) => {
-  return Object.values(data).map((item) => {
-    const beloppArr = months.map((month) => {
-      const monthData = item.find(
-        (innerItem) => innerItem.bokford.slice(5, 7) === month
-      );
-      return monthData ? monthData.belopp : ".";
-    });
-    return beloppArr.every((belopp) => belopp === ".")
-      ? item.map(() => ".")
-      : beloppArr;
-  });
-};
 
 const DataComponent = ({ data }) => (
   <>
@@ -260,9 +232,9 @@ const DataCatCell = ({ dataCat, data }) => {
   const [openKey, setOpenKey] = useState("");
   const [objData, setObjData] = useState({});
   const onClick = (key) => {
-    setObjData(objRemoveKeysDate(handleDatOnClick(data[key])));
+    setObjData(objRemoveKeysDate(objWithKeys(data[key])));
     if (key === openKey) return setOpenKey("");
-    if (Object.keys(handleDatOnClick(data[key])).length > 1) {
+    if (Object.keys(objWithKeys(data[key])).length > 1) {
       setOpenKey(key);
     }
   };
@@ -271,12 +243,8 @@ const DataCatCell = ({ dataCat, data }) => {
     <>
       {Object.keys(data).map((key, index) => {
         return (
-          <>
-            <tr
-              className="cursor-pointer"
-              key={index}
-              onClick={() => onClick(key)}
-            >
+          <Fragment key={index}>
+            <tr className="cursor-pointer" onClick={() => onClick(key)}>
               <td>{key}</td>
               {dataCat[index].map((belopp, innerIndex) => {
                 return (
@@ -287,22 +255,11 @@ const DataCatCell = ({ dataCat, data }) => {
               })}
             </tr>
             {key === openKey && <DataComponent data={objData} />}
-          </>
+          </Fragment>
         );
       })}
     </>
   );
 };
-
-function handleDatOnClick(data) {
-  return data.reduce((acc, obj) => {
-    const key = obj.text;
-    if (!acc[key]) {
-      acc[key] = [];
-    }
-    acc[key].push(obj);
-    return acc;
-  }, {});
-}
 
 export default Layout;
