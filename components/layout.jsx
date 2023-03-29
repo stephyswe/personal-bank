@@ -129,10 +129,10 @@ const Layout = ({
               <TrYear id="Inbetalningar" />
               <DataComponent data={incomeObj} />
               <NewTR />
-              <TrYear id="Perm Exp" />
+              <TrYear id="Kommande utgifter" />
               <DataComponentCombineCategories data={moreData.permExpense} />
               <NewTR />
-              <TrYear id="Custom Exp" />
+              <TrYear id="Spridda utgifter" />
               <DataComponentCombineCategories data={moreData.customExpense} />
               <NewTR />
 
