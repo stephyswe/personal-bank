@@ -1,7 +1,8 @@
-import { beloppValues, beloppValuesOnClick } from "../../utils/common";
+import { mapDataValues } from "../../utils/common/mapDataValues";
+import { mapDataValuesClick } from "../../utils/common/mapDataValuesClick";
 
 export const DataComponent = ({ data, isClick }) => {
-  const functionToUse = isClick ? beloppValuesOnClick : beloppValues;
+  const functionToUse = isClick ? mapDataValuesClick : mapDataValues;
   return (
     <>
       {Object.keys(data).map((key, index) => {

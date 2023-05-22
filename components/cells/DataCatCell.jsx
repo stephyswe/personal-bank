@@ -1,14 +1,10 @@
 import { Fragment, useState } from "react";
+
 import { DataComponent } from "./DataComponent";
-import { objectKeysAll } from "../../utils/data";
 
-function highLightKnownKeys(categoryKey, isCategories) {
-  if (categoryKey in objectKeysAll && isCategories) {
-    return <td className="bg-green-200">{categoryKey}</td>;
-  }
-
-  return <td>{categoryKey}</td>;
-}
+import { objRemoveKeysDate } from "../../utils/api";
+import { highLightCategories } from "../../utils/layout/highlightCategories";
+import { objWithKeys } from "../../utils/common/objWithkeys";
 
 export const DataCatCell = ({ isCategories, dataCat, data }) => {
   const [openKey, setOpenKey] = useState("");
@@ -27,7 +23,7 @@ export const DataCatCell = ({ isCategories, dataCat, data }) => {
         return (
           <Fragment key={index}>
             <tr className={`cursor-pointer`} onClick={() => onClick(key)}>
-              {highLightKnownKeys(key, isCategories)}
+              {highLightCategories(key, isCategories)}
               {dataCat[index].map((belopp, innerIndex) => {
                 return (
                   <td key={innerIndex}>

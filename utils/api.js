@@ -12,7 +12,12 @@ export function getExcel(filePath) {
   // remove all rows before 2023-01-01 in fileData
   const filteredData = fileData.splice(5).filter((item) => {
     const date = new Date(item.bokford);
-    if (date > new Date("2023-03-25")) {
+
+    // get today date -1 day
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    if (date > yesterday) {
       item.saldo = "LAST";
     }
     return date >= new Date("2023-01-01");
@@ -22,7 +27,7 @@ export function getExcel(filePath) {
 
 // function fix it
 export function handleCategories(data) {
-  const beloppValues = Object.values(data).map((item) => {
+  const returnData = Object.values(data).map((item) => {
     const beloppArr = months.map((month) => {
       const monthData = item.find(
         (innerItem) => innerItem.bokford.slice(5, 7) === month
@@ -38,7 +43,7 @@ export function handleCategories(data) {
       : beloppArr;
   });
 
-  return beloppValues;
+  return returnData;
 }
 
 export const getMonthlySums = (value) => {
