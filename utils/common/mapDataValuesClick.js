@@ -1,6 +1,6 @@
-import { months } from "../data";
+import { months } from "../data/months";
 
-export const mapDataValuesClick  = (data) => {
+export const mapDataValuesClick = (data) => {
   return Object.values(data).map((item) => {
     // Map values for each month
     const mappedValues = months.map((month) => {

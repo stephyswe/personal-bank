@@ -1,4 +1,5 @@
 import DataTable from "react-data-table-component";
+
 import { columns } from "../utils/main/columns";
 
 const ProductListHeader = () => (
@@ -7,7 +8,7 @@ const ProductListHeader = () => (
   </div>
 );
 
-export const ProductList = ({ data }) => (
+const ProductTable = ({ data }) => (
   <div className="block bg-white p-10">
     <ProductListHeader />
     <DataTable
@@ -20,3 +21,5 @@ export const ProductList = ({ data }) => (
     />
   </div>
 );
+
+export default ProductTable;

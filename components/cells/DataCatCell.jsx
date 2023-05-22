@@ -2,9 +2,9 @@ import { Fragment, useState } from "react";
 
 import { DataComponent } from "./DataComponent";
 
-import { objRemoveKeysDate } from "../../utils/api";
 import { highLightCategories } from "../../utils/layout/highlightCategories";
 import { objWithKeys } from "../../utils/common/objWithkeys";
+import { objRemoveKeysDate } from "../../utils/api/objRemoveKeysDate";
 
 export const DataCatCell = ({ isCategories, dataCat, data }) => {
   const [openKey, setOpenKey] = useState("");

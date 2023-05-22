@@ -1,7 +1,7 @@
 import Head from "next/head";
 
-import Layout from "../components/layout";
-import { getExcel } from "../utils/api";
+import { getExcel } from "../utils/api/getExcel";
+import Layout from "../components/Layout";
 
 export async function getStaticProps() {
   return {

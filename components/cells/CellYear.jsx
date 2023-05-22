@@ -1,12 +1,10 @@
-import { headersYear } from "../../utils/data";
+import { headersYear } from "../../utils/data/headersYear";
 
-const TableDataRow = ({ id, data }) => (
+export const CellYear = ({ id, data }) => (
   <tr>
     <td className="text-left">{id}</td>
-    {data.map((datum, index) => (
+    {headersYear.map((datum, index) => (
       <td key={index}>{datum}</td>
     ))}
   </tr>
 );
-
-export const CellYear = ({ id }) => <TableDataRow id={id} data={headersYear} />;

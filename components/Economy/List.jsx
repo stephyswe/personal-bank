@@ -1,11 +1,11 @@
-import { CellNew } from "./cells/CellNew";
-import { CellTop } from "./cells/CellTop";
-import { CellYear } from "./cells/CellYear";
-import { DataCatCell } from "./cells/DataCatCell";
-import { DataCell } from "./cells/DataCell";
-import { DataComponent } from "./cells/DataComponent";
+import { CellNew } from "../cells/CellNew";
+import { CellYear } from "../cells/CellYear";
+import { DataCatCell } from "../cells/DataCatCell";
+import { DataCell } from "../cells/DataCell";
+import { DataComponent } from "../cells/DataComponent";
+import { TableHeaderRow } from "../cells/TableHeaderRow";
 
-export const TabList = ({
+export const EconomyList = ({
   data: {
     incAtStart,
     expCustom,
@@ -26,7 +26,7 @@ export const TabList = ({
   return (
     <table>
       <thead>
-        <CellTop />
+        <TableHeaderRow />
       </thead>
       <tbody>
         <CellYear id="Sammanställning" />

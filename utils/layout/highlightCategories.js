@@ -1,4 +1,4 @@
-import { objectKeysAll } from "../data";
+import { objectKeysAll } from "../data/objectKeysAll";
 
 export function highLightCategories(categoryKey, isCategories) {
   if (categoryKey in objectKeysAll && isCategories) {

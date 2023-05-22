@@ -1,34 +1,3 @@
-export const customOrder = [
-  "Telefon",
-  "El",
-  "Hemförsäkring",
-  "Hyra",
-  "LÅN_MoneyGo",
-  "LÅN_SEB",
-  "Utemat",
-  "Mat",
-  "Nöje",
-  "Resor",
-  "Träning",
-  "Övrigt",
-  "SEB_Enkla",
-  "Abonnemang",
-  "d",
-  "b",
-  "e",
-];
-
-export const objectPermExpense = {
-  Hyra: ["HSB MÖLNDAL EK. FÖR."],
-  SEB_Enkla: ["ENKLA VARDAG"],
-  Hemförsäkring: ["IF SKADEFÖRS"],
-  LÅN_MoneyGo: ["MONEYGO AB"],
-  LÅN_SEB: ["LÅNEOMS"],
-  El: ["MÖLNDAL ENERGI AB"],
-  Telefon: ["TELENOR", "VIMLA"],
-  Abonnemang: ["FRISKTANDV", "GOTEBORGS-PO", "UNIONEN", "UNION.AKASSA"],
-};
-
 export const objectCustomExpense = {
   Okänd: [
     "1232900371",
@@ -40,7 +9,7 @@ export const objectCustomExpense = {
     "KFUM REPRIS",
     "GREENSLOPES",
     "GOOGLE  GOOG",
-    "BIRMINGHAM"
+    "BIRMINGHAM",
   ],
   Räkning: ["VISMA FINANCIAL SOLUTION", "QLIRO"],
   Hälsa: [
@@ -124,52 +93,3 @@ export const objectCustomExpense = {
     "JAPAN HOUSE",
   ],
 };
-
-export const objectKeys = { ...objectPermExpense, ...objectCustomExpense };
-
-export const objectKeysAll = { ...objectPermExpense, ...objectCustomExpense };
-
-export const months = [
-  "01",
-  "02",
-  "03",
-  "04",
-  "05",
-  "06",
-  "07",
-  "08",
-  "09",
-  "10",
-  "11",
-  "12",
-];
-
-export const headersTop = [
-  "A",
-  "B",
-  "C",
-  "D",
-  "E",
-  "F",
-  "G",
-  "H",
-  "I",
-  "J",
-  "K",
-  "L",
-  "M",
-];
-export const headersYear = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "Maj",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Okt",
-  "Nov",
-  "Dec",
-];

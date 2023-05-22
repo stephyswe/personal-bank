@@ -1,6 +1,6 @@
-import { TabList } from "./TabList";
+import { EconomyList } from "./List";
 
-export const TabContainer = ({ onButtonClick, data }) => (
+const EconomyContainer = ({ onButtonClick, data }) => (
   <div className="block bg-white p-10 mb-5">
     <div className="flex justify-between items-center w-full mb-5">
       <h3 className="font-medium text-2xl text-gray-70">Budget</h3>
@@ -11,6 +11,8 @@ export const TabContainer = ({ onButtonClick, data }) => (
     >
       Ändring till mån: 05-01 - 05-31
     </button>
-    <TabList data={data} />
+    <EconomyList data={data} />
   </div>
 );
+
+export default EconomyContainer;
