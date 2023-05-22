@@ -20,7 +20,6 @@ export const EconomyList = ({
     customExpense,
     expAllCat,
     expAll,
-    expAllNew,
   },
 }) => {
   return (
