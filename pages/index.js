@@ -1,31 +1,24 @@
-import MainProgram from "../components/mainprogram";
 import Head from "next/head";
 
-import {
-  getExcel,
-} from "../utils/api";
+import Layout from "../components/layout";
+import { getExcel } from "../utils/api";
+
+export async function getStaticProps() {
+  return {
+    props: {
+      data: getExcel("./pages/kontoutdrag.xlsx"),
+    },
+  };
+}
 
 export default function Home({ data }) {
   return (
     <>
       <Head>
         <title>Eksport Import Excel Next JS</title>
-        <meta
-          name="description"
-          content="Excel"
-        />
+        <meta name="description" content="Excel" />
       </Head>
-      <MainProgram data={data} />
+      <Layout tableData={data} />
     </>
   );
-}
-
-export async function getStaticProps() {
-  const fileData = getExcel("./pages/kontoutdrag.xlsx");
-
-  return {
-    props: {
-      data: fileData,
-    },
-  };
 }
