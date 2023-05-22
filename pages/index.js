@@ -2,22 +2,7 @@ import MainProgram from "../components/mainprogram";
 import Head from "next/head";
 
 import {
-  customOrder,
-  objectCustomExpense,
-  objectKeys,
-  objectPermExpense,
-} from "../utils/data";
-import {
-  filterAndFillData,
   getExcel,
-  getMonthlySums,
-  groupByBelopp,
-  handleCategories,
-  objCat,
-  objCatWithKeys,
-  objRemoveKeysDate,
-  sortByOrder,
-  sortDefault,
 } from "../utils/api";
 
 export default function Home({ data }) {
@@ -27,7 +12,7 @@ export default function Home({ data }) {
         <title>Eksport Import Excel Next JS</title>
         <meta
           name="description"
-          content="Latihan menggunakan NextJS untuk eksport dan import data dengan Excel"
+          content="Excel"
         />
       </Head>
       <MainProgram data={data} />

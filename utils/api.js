@@ -1,25 +1,5 @@
 import * as XLSX from "xlsx";
-import { months } from "./data";
-
-export function objRemoveKeysDate(dataObj) {
-  const combinedExpensesData2 = {};
-  for (const [key, value] of Object.entries(dataObj)) {
-    if (key.includes("/")) {
-      const index = key.indexOf("/");
-      const newKey = key.slice(0, index).trim();
-      if (!combinedExpensesData2[newKey]) {
-        combinedExpensesData2[newKey] = [];
-      }
-      combinedExpensesData2[newKey] = [
-        ...combinedExpensesData2[newKey],
-        ...value,
-      ];
-    } else {
-      combinedExpensesData2[key] = value;
-    }
-  }
-  return combinedExpensesData2;
-}
+import { months, objectKeysAll } from "./data";
 
 export function getExcel(filePath) {
   const workbook = XLSX.readFile(filePath);
@@ -91,7 +71,7 @@ export const filterAndFillData = (income, expenses, startVal, hasStart) => {
   const exp = getMonthlySums(expenses);
   const newArr = subtractArrays(inc, exp);
   if (hasStart) {
-    newArr.unshift(18772);
+    newArr.unshift(startVal);
   }
   const incVal = hasStart ? 1 : 0;
   const currentDate = new Date();
@@ -125,7 +105,7 @@ export const sortByOrder = (data, order) => {
 };
 
 export const groupByBelopp = (data, isPositive) => {
-  const result = {};
+  const obj = {};
 
   const filterFunc = isPositive
     ? (item) => item.belopp > 0
@@ -133,48 +113,62 @@ export const groupByBelopp = (data, isPositive) => {
 
   for (const item of data.filter(filterFunc)) {
     const key = item.text;
-    if (!result[key]) {
-      result[key] = [];
+    if (!obj[key]) {
+      obj[key] = [];
     }
-    result[key].push(item);
+    obj[key].push(item);
   }
 
-  return result;
+  return obj;
 };
 
 export function objCat(data, objectKeys) {
-  const newData = {};
+  const obj = {};
   for (const [key, value] of Object.entries(data)) {
     const matchedKey = Object.keys(objectKeys).find((objKey) =>
       objectKeys[objKey].includes(key)
     );
     if (matchedKey) {
-      if (!newData[matchedKey]) {
-        newData[matchedKey] = [];
+      if (!obj[matchedKey]) {
+        obj[matchedKey] = [];
       }
-      newData[matchedKey] = [...newData[matchedKey], ...value];
+      obj[matchedKey] = [...obj[matchedKey], ...value];
     }
   }
-  return newData;
+  return obj;
 }
 
 export function objCatWithKeys(data, objectKeys) {
-  const combinedCategories = {};
+  const obj = {};
   for (const [key, value] of Object.entries(data)) {
     const matchedKey = Object.keys(objectKeys).find((objKey) =>
       objectKeys[objKey].includes(key)
     );
     if (matchedKey) {
-      if (!combinedCategories[matchedKey]) {
-        combinedCategories[matchedKey] = [];
+      if (!obj[matchedKey]) {
+        obj[matchedKey] = [];
       }
-      combinedCategories[matchedKey] = [
-        ...combinedCategories[matchedKey],
-        ...value,
-      ];
+      obj[matchedKey] = [...obj[matchedKey], ...value];
     } else {
-      combinedCategories[key] = value;
+      obj[key] = value;
     }
   }
-  return combinedCategories;
+  return obj;
+}
+
+export function objRemoveKeysDate(dataObj) {
+  const obj = {};
+  for (const [key, value] of Object.entries(dataObj)) {
+    if (key.includes("/")) {
+      const index = key.indexOf("/");
+      const newKey = key.slice(0, index).trim();
+      if (!obj[newKey]) {
+        obj[newKey] = [];
+      }
+      obj[newKey] = [...obj[newKey], ...value];
+    } else {
+      obj[key] = value;
+    }
+  }
+  return obj;
 }

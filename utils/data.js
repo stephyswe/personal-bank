@@ -30,9 +30,25 @@ export const objectPermExpense = {
 };
 
 export const objectCustomExpense = {
-  Okänd: ["1232900371", "1233199221", "1236218176", "1236417380"],
-  Räkning: ["VISMA FINANCIAL SOLUTION"],
-  Hälsa: ["APOTEKET AB", "REGIONSERVICE PATIENTFAK"],
+  Okänd: [
+    "1232900371",
+    "1233199221",
+    "1236218176",
+    "1236417380",
+    "8662781349",
+    "SEATTLE",
+    "KFUM REPRIS",
+    "GREENSLOPES",
+    "GOOGLE  GOOG",
+    "BIRMINGHAM"
+  ],
+  Räkning: ["VISMA FINANCIAL SOLUTION", "QLIRO"],
+  Hälsa: [
+    "APOTEKET AB",
+    "REGIONSERVICE PATIENTFAK",
+    "APOTEKSGRUPP",
+    "K*FOTBUTIKEN",
+  ],
   Nöje: [
     "AMAZONRETAIL",
     "K*SPELBUTIKE",
@@ -41,8 +57,10 @@ export const objectCustomExpense = {
     "HAGABIONS CA",
     "KJELL & CO 1",
     "KJELL & CO 3",
+    "BIO ROY",
+    "RÖHSSKA MUSE",
   ],
-  Present: ["DESIGNTORGET"],
+  Present: ["DESIGNTORGET", "AMAZONMKTPLC", "ANTIQVARIA A"],
   Resor: ["VÄSTTRAFIK A", "VASTTRAFIK T"],
   Träning: ["NORDICWELL", "SPORTLIFE M", "FTC MOLNDAL"],
   Övrigt: [
@@ -60,16 +78,22 @@ export const objectCustomExpense = {
     "K*ETSY.COM",
     "EC STATIONS",
     "AKADEMIBOKHA",
+    "KLARNA BANK",
   ],
   Mat: [
     "WILLYS GOTEB",
     "WILLYS HEMMA",
     "WILLY:S AB",
     "LIDL 346",
+    "LIDL 326",
     "HEMKOP",
     "HEMKOP GOTEG",
     "HEMKOP TROLL",
     "NYTTIG",
+    "4 GOTT AVENY",
+    "COOP AVENYN",
+    "HEMKOP GOTEB",
+    "ICA KVANTUM",
   ],
   Utemat: [
     "FLODAJERNVEG",
@@ -82,6 +106,7 @@ export const objectCustomExpense = {
     "4415193 7-EL",
     "4128113 PRES",
     "4028150 PRES",
+    "4428155 PRES",
     "LE SUSHIBAR ",
     "ESPRESSO H 2",
     "K*FOODORA AB",
@@ -92,10 +117,17 @@ export const objectCustomExpense = {
     "NW GOTEBORG",
     "LE SUSHIBAR",
     "DELABOLE",
+    "EDO SUSHI",
+    "ESPRESSO HOU",
+    "KARAMELLBYRA",
+    "MASAKI SUSHI",
+    "JAPAN HOUSE",
   ],
 };
 
 export const objectKeys = { ...objectPermExpense, ...objectCustomExpense };
+
+export const objectKeysAll = { ...objectPermExpense, ...objectCustomExpense };
 
 export const months = [
   "01",

@@ -1,8 +1,18 @@
 import { Fragment, useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
-import { headersTop, headersYear } from "../utils/data";
+import {
+  headersTop,
+  headersYear,
+  objectCustomExpense,
+  objectKeysAll,
+} from "../utils/data";
 import { objRemoveKeysDate } from "../utils/api";
-import { beloppValues, convertData, objWithKeys } from "../utils/common";
+import {
+  beloppValues,
+  beloppValuesOnClick,
+  convertData,
+  objWithKeys,
+} from "../utils/common";
 
 const Layout = ({ newData, tableData, showModal, columns, buttonExport }) => {
   const [initData, setInitData] = useState(newData);
@@ -19,7 +29,7 @@ const Layout = ({ newData, tableData, showModal, columns, buttonExport }) => {
   function changeDate(data) {
     return data.filter((item) => {
       const date = new Date(item.bokford);
-      return date >= new Date("2023-03-01");
+      return date >= new Date("2023-01-01") && date <= new Date("2023-01-02");
     });
   }
 
@@ -117,7 +127,7 @@ const DataMain = ({
         <DataCatCell data={customExpense} dataCat={expCustomCat} />
         <CellNew />
         <CellYear id="Utbetalningar (Kategorier)" />
-        <DataCatCell data={expAll} dataCat={expAllCat} />
+        <DataCatCell isCategories data={expAll} dataCat={expAllCat} />
         <CellNew />
         <CellYear id="Utbetalningar" />
         <DataComponent data={expAllNew} />
@@ -224,22 +234,35 @@ const DataCell = ({ id, data, renderAsIntegers }) => (
   </tr>
 );
 
-const DataComponent = ({ data }) => (
-  <>
-    {Object.keys(data).map((key, index) => {
-      return (
-        <tr key={index}>
-          <td>{key}</td>
-          {beloppValues(data)[index].map((belopp, innerIndex) => (
-            <td key={innerIndex}>{belopp}</td>
-          ))}
-        </tr>
-      );
-    })}
-  </>
-);
+const DataComponent = ({ data, isClick }) => {
+  const functionToUse = isClick ? beloppValuesOnClick : beloppValues;
+  return (
+    <>
+      {Object.keys(data).map((key, index) => {
+        return (
+          <tr key={index}>
+            <td>{key}</td>
+            {functionToUse(data)[index].map((belopp, innerIndex) => (
+              <td key={innerIndex} onClick={isClick ? isClick : null}>
+                {belopp}
+              </td>
+            ))}
+          </tr>
+        );
+      })}
+    </>
+  );
+};
 
-const DataCatCell = ({ dataCat, data }) => {
+function highLightKnownKeys(categoryKey, isCategories) {
+  if (categoryKey in objectKeysAll && isCategories) {
+    return <td className="bg-green-200">{categoryKey}</td>;
+  }
+
+  return <td>{categoryKey}</td>;
+}
+
+const DataCatCell = ({ isCategories, dataCat, data }) => {
   const [openKey, setOpenKey] = useState("");
   const [objData, setObjData] = useState({});
   const onClick = (key) => {
@@ -255,8 +278,11 @@ const DataCatCell = ({ dataCat, data }) => {
       {Object.keys(data).map((key, index) => {
         return (
           <Fragment key={index}>
-            <tr className="cursor-pointer" onClick={() => onClick(key)}>
-              <td>{key}</td>
+            <tr
+              className={`cursor-pointer`}
+              onClick={() => onClick(key)}
+            >
+              {highLightKnownKeys(key, isCategories)}
               {dataCat[index].map((belopp, innerIndex) => {
                 return (
                   <td key={innerIndex}>
@@ -265,7 +291,7 @@ const DataCatCell = ({ dataCat, data }) => {
                 );
               })}
             </tr>
-            {key === openKey && <DataComponent data={objData} />}
+            {key === openKey && <DataComponent data={objData} isClick />}
           </Fragment>
         );
       })}
