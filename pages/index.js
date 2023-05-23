@@ -6,7 +6,8 @@ import Layout from "../components/Layout";
 export async function getStaticProps() {
   return {
     props: {
-      data: getExcel("./pages/kontoutdrag.xlsx"),
+      // data: getExcel("./pages/kontoutdrag.xlsx")
+      data: [],
     },
   };
 }

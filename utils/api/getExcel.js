@@ -2,7 +2,7 @@ import * as XLSX from "xlsx";
 
 import { CONST_FIRST_DAY_OF_YEAR } from "../const";
 
-const excelHeader = ["bokford", "valuta", "nummer", "text", "belopp", "saldo"];
+export const excelHeader = ["bokford", "valuta", "nummer", "text", "belopp", "saldo"];
 
 export function getExcel(filePath) {
   const workbook = XLSX.readFile(filePath);

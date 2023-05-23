@@ -8,9 +8,22 @@ const ProductListHeader = () => (
   </div>
 );
 
-const ProductTable = ({ data }) => (
+const ProductTable = ({ data, importExcel }) => (
   <div className="block bg-white p-10">
     <ProductListHeader />
+    <div className="block">
+      <label
+        className="ml-3 mt-1 cursor-pointer text-gray-800 transtion-all duration-300 ease-in hover:text-blue-400"
+        htmlFor="file"
+        onClick={() => {
+          // setButtonExport(!buttonExport);
+        }}
+      >
+        From Excel
+      </label>
+      <input className="hidden" id="file" onChange={importExcel} type="file" />
+    </div>
+
     <DataTable
       data={data}
       columns={columns}
