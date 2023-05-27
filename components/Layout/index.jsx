@@ -11,6 +11,7 @@ import EconomyContainer from "../Economy/Container";
 import { excelHeader } from "../../utils/api/getExcel";
 
 const Layout = ({ tableData }) => {
+  const [isClick, setIsClick] = useState(false);
   const [initData, setInitData] = useState(tableData);
   const [data, setData] = useState(null);
 
@@ -51,11 +52,15 @@ const Layout = ({ tableData }) => {
   };
 
   useEffect(() => {
-    convertData(initData, setData);
+    convertData(changeDate(initData), setData);
   }, [initData]);
 
   const onClick = () => {
-    convertData(changeDate(initData), setData);
+    if (isClick) convertData(changeDate(initData), setData);
+    else {
+      convertData(initData, setData);
+    }
+    setIsClick(!isClick);
   };
 
   if (!data) return <div>Loading...</div>;
@@ -64,7 +69,11 @@ const Layout = ({ tableData }) => {
     <div className="bg-gray-300 min-h-screen h-full">
       <div className="py-20 px-[200px]">
         <Navbar />
-        <EconomyContainer onButtonClick={onClick} data={data} />
+        <EconomyContainer
+          onButtonClick={onClick}
+          data={data}
+          isClick={isClick}
+        />
         <ProductTable data={initData} importExcel={importExcel} />
       </div>
     </div>
