@@ -1,19 +1,19 @@
-import { getMonthlySums } from "../../utils/api/getMonthlySums";
-import { groupByBelopp } from "../../utils/api/groupByBelopp";
-import { handleCategories } from "../../utils/api/handleCategories";
-import { objCat } from "../../utils/api/objCat";
-import { objCatWithKeys } from "../../utils/api/objCatWithKeys";
-import { objRemoveKeysDate } from "../../utils/api/objRemoveKeysDate";
-import { sortByOrder } from "../../utils/api/sortByOrder";
-import { sortDefault } from "../../utils/api/sortDefault";
-import { filterAndFillData } from "../../utils/filterAndFillData";
+import { getMonthlySums } from "../api/getMonthlySums";
+import { groupByBelopp } from "../api/groupByBelopp";
+import { handleCategories } from "../api/handleCategories";
+import { objCat } from "../api/objCat";
+import { objCatWithKeys } from "../api/objCatWithKeys";
+import { objRemoveKeysDate } from "../api/objRemoveKeysDate";
+import { sortByOrder } from "../api/sortByOrder";
+import { sortDefault } from "../api/sortDefault";
+import { filterAndFillData } from "../filterAndFillData";
 
-import { CONST_BUDGET_START_VALUE } from "../../utils/const";
+import { CONST_BUDGET_START_VALUE } from "../const";
 
-import { customOrder } from "../../utils/data/customOrder";
-import { objectPermExpense } from "../../utils/data/objectPermExpense";
-import { objectCustomExpense } from "../../utils/data/objectCustomExpense";
-import { objectKeysAll } from "../../utils/data/objectKeysAll";
+import { customOrder } from "../data/customOrder";
+import { objectPermExpense } from "../data/objectPermExpense";
+import { objectCustomExpense } from "../data/objectCustomExpense";
+import { objectKeysAll } from "../data/objectKeysAll";
 
 export function convertData(fileData, setData) {
   const objInc = groupByBelopp(fileData, true);

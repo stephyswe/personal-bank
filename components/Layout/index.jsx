@@ -2,15 +2,34 @@ import { useEffect, useState } from "react";
 import * as XLSX from "xlsx";
 
 import { Navbar } from "../navbar";
-import { convertData } from "./convertData";
-
+import { convertData } from "../../utils/layout/convertData";
 import { changeDate } from "../../utils/layout/changeDate";
 
 import ProductTable from "../ProductTable";
 import EconomyContainer from "../Economy/Container";
 import { excelHeader } from "../../utils/api/getExcel";
 
+export const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+const currentMonth = new Date().getMonth();
+
 const Layout = ({ tableData }) => {
+  const [selectedMonth, setSelectedMonth] = useState(
+    (currentMonth + 1).toString().padStart(2, "0")
+  );
   const [isClick, setIsClick] = useState(false);
   const [initData, setInitData] = useState(tableData);
   const [data, setData] = useState(null);
@@ -52,11 +71,11 @@ const Layout = ({ tableData }) => {
   };
 
   useEffect(() => {
-    convertData(changeDate(initData), setData);
-  }, [initData]);
+    convertData(changeDate(initData, selectedMonth), setData);
+  }, [initData, selectedMonth]);
 
   const onClick = () => {
-    if (isClick) convertData(changeDate(initData), setData);
+    if (isClick) convertData(changeDate(initData, selectedMonth), setData);
     else {
       convertData(initData, setData);
     }
@@ -65,14 +84,21 @@ const Layout = ({ tableData }) => {
 
   if (!data) return <div>Loading...</div>;
 
+  const handleSelect = (event) => {
+    setSelectedMonth(event.target.value);
+    localStorage.setItem("selectedMonth", event.target.value);
+  };
+
   return (
     <div className="bg-gray-300 min-h-screen h-full">
-      <div className="py-20 px-[200px]">
+      <div className="p-4">
         <Navbar />
         <EconomyContainer
           onButtonClick={onClick}
           data={data}
           isClick={isClick}
+          handleSelect={handleSelect}
+          selectedMonth={selectedMonth}
         />
         <ProductTable data={initData} importExcel={importExcel} />
       </div>

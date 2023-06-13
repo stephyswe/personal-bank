@@ -1,6 +1,9 @@
-export function changeDate(data) {
+export function changeDate(data, month) {
   return data.filter((item) => {
     const date = new Date(item.bokford);
-    return date >= new Date("2023-04-01") && date <= new Date("2023-04-31");
+    return (
+      date >= new Date(`2023-${month}-01`) &&
+      date <= new Date(`2023-${month}-31`)
+    );
   });
 }

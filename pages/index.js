@@ -1,13 +1,17 @@
+import fs from "fs";
+import { join } from "path";
 import Head from "next/head";
 
 import { getExcel } from "../utils/api/getExcel";
 import Layout from "../components/Layout";
 
 export async function getStaticProps() {
+  const filePath = join(process.cwd(), "kontoutdrag.xlsx");
+  const data = fs.existsSync(filePath) ? getExcel(filePath) : [];
+
   return {
     props: {
-      // data: getExcel("./pages/kontoutdrag.xlsx")
-      data: [],
+      data,
     },
   };
 }

@@ -1,5 +1,10 @@
 export const objectCustomExpense = {
   Okänd: [
+    "DIREKTEN TOP",
+    "TALLINN",
+    "PHOENIX ",
+    "1231901461",
+    "8662781349",
     "1232900371",
     "1233199221",
     "1236218176",
@@ -13,12 +18,15 @@ export const objectCustomExpense = {
   ],
   Räkning: ["VISMA FINANCIAL SOLUTION", "QLIRO"],
   Hälsa: [
+    "APOTEKET KOR",
     "APOTEKET AB",
     "REGIONSERVICE PATIENTFAK",
     "APOTEKSGRUPP",
     "K*FOTBUTIKEN",
   ],
   Nöje: [
+    "BOLT EU",
+    "CAPITOL ",
     "AMAZONRETAIL",
     "K*SPELBUTIKE",
     "RIOT  AE3N32",
@@ -31,7 +39,7 @@ export const objectCustomExpense = {
   ],
   Present: ["DESIGNTORGET", "AMAZONMKTPLC", "ANTIQVARIA A"],
   Resor: ["VÄSTTRAFIK A", "VASTTRAFIK T"],
-  Träning: ["NORDICWELL", "SPORTLIFE M", "FTC MOLNDAL"],
+  Träning: ["NW GOTEBORG ", "NORDICWELL", "SPORTLIFE M", "FTC MOLNDAL"],
   Övrigt: [
     "SAN FR",
     "DUBLIN",
@@ -50,6 +58,7 @@ export const objectCustomExpense = {
     "KLARNA BANK",
   ],
   Mat: [
+    "WILLYS WIESE",
     "WILLYS GOTEB",
     "WILLYS HEMMA",
     "WILLY:S AB",
@@ -65,6 +74,7 @@ export const objectCustomExpense = {
     "ICA KVANTUM",
   ],
   Utemat: [
+    "RESTAURANG C",
     "FLODAJERNVEG",
     "LILLA TOKYO",
     "KROKSLATTS L",
