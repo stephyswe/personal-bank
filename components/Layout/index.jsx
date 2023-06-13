@@ -3,7 +3,7 @@ import * as XLSX from "xlsx";
 
 import { Navbar } from "../navbar";
 import { convertData } from "../../utils/layout/convertData";
-import { changeDate } from "../../utils/layout/changeDate";
+import { changeDate, changeCustomDate } from "../../utils/layout/changeDate";
 
 import ProductTable from "../ProductTable";
 import EconomyContainer from "../Economy/Container";
@@ -27,6 +27,8 @@ export const monthNames = [
 const currentMonth = new Date().getMonth();
 
 const Layout = ({ tableData }) => {
+  const [customSelect, setCustomSelect] = useState([]);
+
   const [selectedMonth, setSelectedMonth] = useState(
     (currentMonth + 1).toString().padStart(2, "0")
   );
@@ -71,6 +73,10 @@ const Layout = ({ tableData }) => {
   };
 
   useEffect(() => {
+    convertData(changeCustomDate(initData, customSelect), setData);
+  }, [customSelect, initData, selectedMonth]);
+
+  useEffect(() => {
     convertData(changeDate(initData, selectedMonth), setData);
   }, [initData, selectedMonth]);
 
@@ -99,6 +105,7 @@ const Layout = ({ tableData }) => {
           isClick={isClick}
           handleSelect={handleSelect}
           selectedMonth={selectedMonth}
+          setCustomSelect={setCustomSelect}
         />
         <ProductTable data={initData} importExcel={importExcel} />
       </div>

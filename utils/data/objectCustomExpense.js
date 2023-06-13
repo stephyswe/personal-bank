@@ -58,6 +58,7 @@ export const objectCustomExpense = {
     "KLARNA BANK",
   ],
   Mat: [
+    "COOP AVENYN",
     "WILLYS WIESE",
     "WILLYS GOTEB",
     "WILLYS HEMMA",

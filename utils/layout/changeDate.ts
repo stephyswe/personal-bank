@@ -7,3 +7,11 @@ export function changeDate(data, month) {
     );
   });
 }
+
+export function changeCustomDate(data, array) {
+  const [start, end] = array;
+  return data.filter((item) => {
+    const date = new Date(item.bokford);
+    return date >= new Date(`2023-${start}`) && date <= new Date(`2023-${end}`);
+  });
+}
