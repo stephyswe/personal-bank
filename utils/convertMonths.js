@@ -15,7 +15,7 @@ export function monthToLetter(monthNumber) {
   ];
 
   if (monthNumber < 1 || monthNumber > 12) {
-    throw new Error("Invalid month number. It must be between 1 and 12.");
+    //throw new Error("Invalid month number. It must be between 1 and 12.");
   }
 
   return monthNames[monthNumber - 1];
