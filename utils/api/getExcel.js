@@ -1,8 +1,16 @@
 import * as XLSX from "xlsx";
+import cloneDeep from "lodash/cloneDeep";
 
 import { CONST_FIRST_DAY_OF_YEAR } from "../const";
 
-export const excelHeader = ["bokford", "valuta", "nummer", "text", "belopp", "saldo"];
+export const excelHeader = [
+  "bokford",
+  "valuta",
+  "nummer",
+  "text",
+  "belopp",
+  "saldo",
+];
 
 export function getExcel(filePath) {
   const workbook = XLSX.readFile(filePath);
@@ -13,7 +21,7 @@ export function getExcel(filePath) {
   });
 
   // remove all rows before 2023-01-01 in fileData
-  return fileData.splice(5).filter((item) => {
+  fileData = fileData.splice(5).filter((item) => {
     const date = new Date(item.bokford);
 
     const yesterday = new Date();
@@ -24,4 +32,7 @@ export function getExcel(filePath) {
     }
     return date >= new Date(CONST_FIRST_DAY_OF_YEAR);
   });
+
+  // Perform deep copy of fileData to eliminate non-serializable properties
+  return cloneDeep(fileData);
 }

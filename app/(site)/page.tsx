@@ -1,11 +1,12 @@
 // pages/index.server.js
-import axios from "axios";
 import Layout from "../../components/Layout";
+import { join } from "path";
+import { getExcel } from "../../utils/api/getExcel";
+import fs from "fs";
 
 export default async function Home() {
-  const PUBLIC_URL = process.env.PUBLIC_URL || "";
-  const response = await axios.get(`${PUBLIC_URL}/api/excel`);
-  const data = response.data;
+  const filePath = join(process.cwd(), "kontoutdrag.xlsx");
+  const data = fs.existsSync(filePath) ? getExcel(filePath) : [];
 
   if (!data) return <div>Loading...</div>;
   return <Layout tableData={data} />;
